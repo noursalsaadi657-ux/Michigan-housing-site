@@ -1,0 +1,2008 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Michigan Housing Crisis Report</title>
+
+  <!-- Google Fonts: Playfair Display (editorial) + Source Sans 3 (body) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Sans+3:wght@300;400;600;700&family=Roboto+Mono:wght@400;600&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ============================================================
+       CSS CUSTOM PROPERTIES — Dark Navy + White + Gold Accent
+       ============================================================ */
+    :root {
+      --navy-deepest: #050d1a;
+      --navy-deep:    #0a1628;
+      --navy-mid:     #0f2044;
+      --navy-light:   #1a3a6e;
+      --navy-accent:  #1e4d9b;
+      --white:        #ffffff;
+      --off-white:    #e8edf5;
+      --muted:        #8da4c4;
+      --gold:         #c8a84b;
+      --gold-light:   #e8c96b;
+      --red-alert:    #e05252;
+      --green-ok:     #4caf82;
+      --border:       rgba(255,255,255,0.08);
+      --glass:        rgba(255,255,255,0.04);
+      --glass-hover:  rgba(255,255,255,0.08);
+      --font-display: 'Playfair Display', Georgia, serif;
+      --font-body:    'Source Sans 3', sans-serif;
+      --font-mono:    'Roboto Mono', monospace;
+      --radius:       6px;
+      --shadow:       0 8px 40px rgba(0,0,0,0.45);
+      --transition:   all 0.35s cubic-bezier(0.4,0,0.2,1);
+    }
+
+    /* ============================================================
+       RESET & BASE
+       ============================================================ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 16px; }
+    body {
+      background: var(--navy-deepest);
+      color: var(--off-white);
+      font-family: var(--font-body);
+      font-weight: 400;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+    a { color: var(--gold); text-decoration: none; transition: var(--transition); }
+    a:hover { color: var(--gold-light); }
+    img { max-width: 100%; }
+
+    /* ============================================================
+       SCROLLBAR STYLING
+       ============================================================ */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--navy-deep); }
+    ::-webkit-scrollbar-thumb { background: var(--navy-light); border-radius: 3px; }
+
+    /* ============================================================
+       UTILITY CLASSES
+       ============================================================ */
+    .container { max-width: 1140px; margin: 0 auto; padding: 0 24px; }
+    .section { padding: 90px 0; }
+    .section-alt { background: var(--navy-deep); }
+    .section-title {
+      font-family: var(--font-display);
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 900;
+      color: var(--white);
+      margin-bottom: 12px;
+      line-height: 1.2;
+    }
+    .section-subtitle {
+      color: var(--muted);
+      font-size: 1.05rem;
+      max-width: 640px;
+      margin-bottom: 52px;
+    }
+    .gold-line {
+      width: 56px; height: 3px;
+      background: var(--gold);
+      margin-bottom: 20px;
+      border-radius: 2px;
+    }
+    .tag {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gold);
+      background: rgba(200,168,75,0.12);
+      border: 1px solid rgba(200,168,75,0.3);
+      padding: 4px 12px;
+      border-radius: 2px;
+      margin-bottom: 18px;
+    }
+    .fade-in {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ============================================================
+       NAVIGATION
+       ============================================================ */
+    #navbar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      background: rgba(5,13,26,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      transition: var(--transition);
+    }
+    .nav-inner {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 24px;
+      max-width: 1140px; margin: 0 auto;
+    }
+    .nav-logo {
+      font-family: var(--font-display);
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--white);
+      display: flex; align-items: center; gap: 10px;
+    }
+    .nav-logo .dot {
+      width: 8px; height: 8px;
+      background: var(--gold);
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%,100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(1.4); }
+    }
+    .nav-links {
+      display: flex; gap: 32px; list-style: none;
+    }
+    .nav-links a {
+      font-size: 0.82rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .nav-links a:hover { color: var(--white); }
+
+    /* Hamburger for mobile */
+    .hamburger {
+      display: none; flex-direction: column; gap: 5px;
+      background: none; border: none; cursor: pointer; padding: 4px;
+    }
+    .hamburger span {
+      display: block; width: 22px; height: 2px;
+      background: var(--off-white);
+      transition: var(--transition);
+    }
+    .mobile-menu {
+      display: none; flex-direction: column;
+      background: var(--navy-deep);
+      padding: 20px 24px;
+      border-top: 1px solid var(--border);
+    }
+    .mobile-menu a {
+      padding: 12px 0;
+      color: var(--off-white);
+      font-weight: 600;
+      border-bottom: 1px solid var(--border);
+    }
+    .mobile-menu.open { display: flex; }
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+    }
+
+    /* ============================================================
+       HERO SECTION
+       ============================================================ */
+    #hero {
+      min-height: 100vh;
+      display: flex; align-items: center;
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(160deg, var(--navy-deepest) 0%, var(--navy-mid) 60%, #0c2952 100%);
+    }
+    /* Animated background grid */
+    #hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+      background-size: 60px 60px;
+      animation: gridDrift 20s linear infinite;
+    }
+    @keyframes gridDrift {
+      0% { background-position: 0 0; }
+      100% { background-position: 60px 60px; }
+    }
+    /* Radial glow */
+    #hero::after {
+      content: '';
+      position: absolute;
+      width: 700px; height: 700px;
+      background: radial-gradient(circle, rgba(30,77,155,0.35) 0%, transparent 70%);
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+    }
+    .hero-content {
+      position: relative; z-index: 2;
+      padding-top: 100px;
+    }
+    .hero-eyebrow {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 22px;
+    }
+    .hero-title {
+      font-family: var(--font-display);
+      font-size: clamp(2.4rem, 6vw, 4.8rem);
+      font-weight: 900;
+      color: var(--white);
+      line-height: 1.08;
+      margin-bottom: 26px;
+    }
+    .hero-title em {
+      font-style: normal;
+      color: var(--gold);
+    }
+    .hero-desc {
+      font-size: 1.15rem;
+      color: var(--muted);
+      max-width: 560px;
+      margin-bottom: 44px;
+      line-height: 1.8;
+    }
+    .hero-cta {
+      display: flex; gap: 16px; flex-wrap: wrap;
+    }
+    .btn-primary {
+      display: inline-block;
+      background: var(--gold);
+      color: var(--navy-deepest);
+      font-weight: 700;
+      font-size: 0.85rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 14px 30px;
+      border-radius: var(--radius);
+      transition: var(--transition);
+      border: none; cursor: pointer;
+    }
+    .btn-primary:hover {
+      background: var(--gold-light);
+      color: var(--navy-deepest);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(200,168,75,0.4);
+    }
+    .btn-outline {
+      display: inline-block;
+      background: transparent;
+      color: var(--off-white);
+      font-weight: 700;
+      font-size: 0.85rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 13px 30px;
+      border-radius: var(--radius);
+      border: 1px solid rgba(255,255,255,0.25);
+      transition: var(--transition);
+      cursor: pointer;
+    }
+    .btn-outline:hover {
+      border-color: var(--white);
+      color: var(--white);
+      transform: translateY(-2px);
+    }
+    /* Michigan outline decorative SVG */
+    .hero-map-dec {
+      position: absolute; right: -60px; top: 50%;
+      transform: translateY(-50%);
+      opacity: 0.06; pointer-events: none;
+      width: 520px;
+    }
+    @media (max-width: 900px) { .hero-map-dec { display: none; } }
+
+    /* ============================================================
+       STATISTICS STRIP
+       ============================================================ */
+    #stats {
+      background: var(--navy-mid);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 60px 0;
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2px;
+    }
+    .stat-card {
+      background: var(--glass);
+      padding: 36px 28px;
+      text-align: center;
+      border: 1px solid var(--border);
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+    .stat-card::before {
+      content: '';
+      position: absolute; bottom: 0; left: 0; right: 0;
+      height: 2px;
+      background: var(--gold);
+      transform: scaleX(0);
+      transition: var(--transition);
+    }
+    .stat-card:hover { background: var(--glass-hover); }
+    .stat-card:hover::before { transform: scaleX(1); }
+    .stat-number {
+      font-family: var(--font-mono);
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 600;
+      color: var(--white);
+      display: block;
+      line-height: 1;
+      margin-bottom: 10px;
+    }
+    .stat-number.red { color: var(--red-alert); }
+    .stat-number.gold { color: var(--gold); }
+    .stat-label {
+      font-size: 0.82rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .stat-note {
+      font-size: 0.72rem;
+      color: rgba(141,164,196,0.6);
+      margin-top: 6px;
+    }
+
+    /* ============================================================
+       CAUSES SECTION
+       ============================================================ */
+    .causes-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+    }
+    .cause-card {
+      background: var(--glass);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 32px 28px;
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+    .cause-card::after {
+      content: '';
+      position: absolute; top: 0; left: 0;
+      width: 3px; height: 100%;
+      background: var(--gold);
+      opacity: 0;
+      transition: var(--transition);
+    }
+    .cause-card:hover {
+      background: var(--glass-hover);
+      transform: translateY(-4px);
+      box-shadow: var(--shadow);
+    }
+    .cause-card:hover::after { opacity: 1; }
+    .cause-icon {
+      font-size: 2.2rem;
+      margin-bottom: 18px;
+      display: block;
+    }
+    .cause-title {
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 12px;
+    }
+    .cause-desc {
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.75;
+    }
+
+    /* ============================================================
+       CITY DATA CARDS
+       ============================================================ */
+    .city-filter {
+      display: flex; gap: 10px; flex-wrap: wrap;
+      margin-bottom: 36px;
+    }
+    .filter-btn {
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 8px 18px;
+      border-radius: 2px;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .filter-btn.active,
+    .filter-btn:hover {
+      background: var(--gold);
+      color: var(--navy-deepest);
+      border-color: var(--gold);
+    }
+    .cities-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+    }
+    .city-card {
+      background: var(--glass);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px;
+      cursor: pointer;
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+    .city-card:hover {
+      background: var(--glass-hover);
+      border-color: rgba(200,168,75,0.3);
+      transform: translateY(-3px);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.5);
+    }
+    .city-name {
+      font-family: var(--font-display);
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 4px;
+    }
+    .city-region {
+      font-size: 0.75rem;
+      color: var(--gold);
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+    .city-stat-row {
+      display: flex; justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.88rem;
+    }
+    .city-stat-row:last-child { border-bottom: none; }
+    .csr-label { color: var(--muted); }
+    .csr-value { color: var(--white); font-weight: 600; font-family: var(--font-mono); }
+    .csr-value.bad { color: var(--red-alert); }
+    .csr-value.warn { color: #e8a84b; }
+    .csr-value.good { color: var(--green-ok); }
+    /* Severity bar */
+    .severity-bar {
+      margin-top: 18px;
+      background: rgba(255,255,255,0.06);
+      border-radius: 2px;
+      height: 4px;
+      overflow: hidden;
+    }
+    .severity-fill {
+      height: 100%;
+      border-radius: 2px;
+      transition: width 1s ease;
+    }
+    .severity-label {
+      display: flex; justify-content: space-between;
+      font-size: 0.7rem;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+
+    /* ============================================================
+       RENT CALCULATOR
+       ============================================================ */
+    #calculator {
+      background: linear-gradient(135deg, var(--navy-mid) 0%, var(--navy-deep) 100%);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .calc-wrapper {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 56px;
+      align-items: start;
+    }
+    @media (max-width: 768px) {
+      .calc-wrapper { grid-template-columns: 1fr; gap: 36px; }
+    }
+    .calc-form { display: flex; flex-direction: column; gap: 22px; }
+    .form-group { display: flex; flex-direction: column; gap: 8px; }
+    .form-label {
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .form-control {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--border);
+      color: var(--white);
+      padding: 14px 16px;
+      border-radius: var(--radius);
+      font-family: var(--font-body);
+      font-size: 1rem;
+      transition: var(--transition);
+      width: 100%;
+    }
+    .form-control:focus {
+      outline: none;
+      border-color: var(--gold);
+      background: rgba(255,255,255,0.09);
+    }
+    .form-control option { background: var(--navy-mid); }
+    .range-row {
+      display: flex; align-items: center; gap: 14px;
+    }
+    input[type=range] {
+      -webkit-appearance: none; appearance: none;
+      flex: 1; height: 4px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 2px; outline: none;
+      cursor: pointer;
+    }
+    input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 18px; height: 18px;
+      border-radius: 50%;
+      background: var(--gold);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    input[type=range]::-webkit-slider-thumb:hover {
+      transform: scale(1.25);
+    }
+    .range-val {
+      font-family: var(--font-mono);
+      font-size: 1rem;
+      color: var(--white);
+      min-width: 80px;
+      text-align: right;
+    }
+    /* Result panel */
+    .calc-result {
+      background: var(--glass);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 36px;
+    }
+    .result-headline {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 6px;
+    }
+    .result-status {
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 5px 14px;
+      border-radius: 2px;
+      display: inline-block;
+      margin-bottom: 24px;
+    }
+    .status-danger { background: rgba(224,82,82,0.15); color: var(--red-alert); border: 1px solid rgba(224,82,82,0.3); }
+    .status-warning { background: rgba(232,168,75,0.15); color: #e8a84b; border: 1px solid rgba(232,168,75,0.3); }
+    .status-ok { background: rgba(76,175,130,0.15); color: var(--green-ok); border: 1px solid rgba(76,175,130,0.3); }
+    .result-breakdown { list-style: none; display: flex; flex-direction: column; gap: 14px; }
+    .result-breakdown li {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 12px 16px;
+      background: rgba(255,255,255,0.03);
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+    .rb-label { color: var(--muted); }
+    .rb-value { font-family: var(--font-mono); font-weight: 600; color: var(--white); }
+    .rb-value.red { color: var(--red-alert); }
+    .rb-value.green { color: var(--green-ok); }
+    .affordability-bar-wrap {
+      margin-top: 24px;
+    }
+    .afford-bar-track {
+      background: rgba(255,255,255,0.07);
+      height: 10px; border-radius: 5px;
+      overflow: hidden; margin-bottom: 8px;
+    }
+    .afford-bar-fill {
+      height: 100%; border-radius: 5px;
+      transition: width 0.8s ease, background 0.8s ease;
+    }
+    .afford-bar-labels {
+      display: flex; justify-content: space-between;
+      font-size: 0.72rem; color: var(--muted);
+    }
+    .result-insight {
+      margin-top: 20px;
+      padding: 16px;
+      background: rgba(200,168,75,0.07);
+      border-left: 3px solid var(--gold);
+      border-radius: 0 4px 4px 0;
+      font-size: 0.9rem;
+      color: var(--off-white);
+      line-height: 1.7;
+    }
+
+    /* ============================================================
+       POLICY SECTION
+       ============================================================ */
+    .policy-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 28px;
+    }
+    .policy-card {
+      background: var(--glass);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      transition: var(--transition);
+    }
+    .policy-card:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
+    .policy-header {
+      padding: 24px 28px 20px;
+      border-bottom: 1px solid var(--border);
+    }
+    .policy-number {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--gold);
+      font-weight: 600;
+      margin-bottom: 10px;
+      letter-spacing: 0.1em;
+    }
+    .policy-title {
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--white);
+    }
+    .policy-body {
+      padding: 24px 28px;
+    }
+    .policy-desc {
+      font-size: 0.93rem;
+      color: var(--muted);
+      line-height: 1.75;
+      margin-bottom: 18px;
+    }
+    .policy-impact {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--green-ok);
+    }
+    .policy-impact::before {
+      content: '↑';
+      font-size: 1rem;
+    }
+
+    /* ============================================================
+       TIMELINE / HISTORY
+       ============================================================ */
+    .timeline {
+      position: relative;
+      padding-left: 32px;
+    }
+    .timeline::before {
+      content: '';
+      position: absolute; left: 0; top: 0; bottom: 0;
+      width: 1px;
+      background: linear-gradient(to bottom, var(--gold), transparent);
+    }
+    .timeline-item {
+      position: relative;
+      padding-bottom: 44px;
+    }
+    .timeline-item:last-child { padding-bottom: 0; }
+    .timeline-dot {
+      position: absolute;
+      left: -36px; top: 4px;
+      width: 10px; height: 10px;
+      background: var(--gold);
+      border-radius: 50%;
+      border: 2px solid var(--navy-deep);
+    }
+    .timeline-year {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      color: var(--gold);
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+    .timeline-title {
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--white);
+      margin-bottom: 8px;
+    }
+    .timeline-desc {
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    /* ============================================================
+       RESOURCES SECTION
+       ============================================================ */
+    .resources-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
+    }
+    .resource-card {
+      background: var(--glass);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px;
+      transition: var(--transition);
+    }
+    .resource-card:hover {
+      background: var(--glass-hover);
+      border-color: rgba(200,168,75,0.25);
+      transform: translateY(-3px);
+    }
+    .rc-type {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 10px;
+    }
+    .rc-name {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 10px;
+    }
+    .rc-desc {
+      font-size: 0.88rem;
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 18px;
+    }
+    .rc-link {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--gold);
+      display: flex; align-items: center; gap: 6px;
+    }
+    .rc-link::after { content: '→'; transition: var(--transition); }
+    .rc-link:hover::after { transform: translateX(4px); }
+
+    /* ============================================================
+       FOOTER
+       ============================================================ */
+    footer {
+      background: var(--navy-deepest);
+      border-top: 1px solid var(--border);
+      padding: 50px 0 30px;
+    }
+    .footer-inner {
+      display: flex; flex-direction: column;
+      gap: 32px;
+    }
+    .footer-top {
+      display: flex; justify-content: space-between;
+      flex-wrap: wrap; gap: 24px;
+    }
+    .footer-brand {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 10px;
+    }
+    .footer-byline {
+      font-size: 0.82rem;
+      color: var(--muted);
+      max-width: 300px;
+    }
+    .footer-links {
+      display: flex; gap: 28px; flex-wrap: wrap;
+    }
+    .footer-links a {
+      font-size: 0.82rem;
+      color: var(--muted);
+      font-weight: 600;
+    }
+    .footer-links a:hover { color: var(--white); }
+    .footer-bottom {
+      font-size: 0.78rem;
+      color: rgba(141,164,196,0.5);
+      border-top: 1px solid var(--border);
+      padding-top: 24px;
+    }
+
+    /* ============================================================
+       MODAL (City Detail)
+       ============================================================ */
+    .modal-overlay {
+      display: none; position: fixed; inset: 0; z-index: 2000;
+      background: rgba(5,13,26,0.88);
+      backdrop-filter: blur(6px);
+      align-items: center; justify-content: center;
+      padding: 24px;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal-box {
+      background: var(--navy-mid);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 40px;
+      max-width: 560px; width: 100%;
+      max-height: 90vh; overflow-y: auto;
+      position: relative;
+      animation: modalIn 0.3s ease;
+    }
+    @keyframes modalIn {
+      from { opacity: 0; transform: scale(0.94) translateY(12px); }
+      to   { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    .modal-close {
+      position: absolute; top: 16px; right: 16px;
+      background: none; border: none;
+      color: var(--muted); font-size: 1.4rem;
+      cursor: pointer; transition: var(--transition);
+      line-height: 1;
+    }
+    .modal-close:hover { color: var(--white); }
+    .modal-city-name {
+      font-family: var(--font-display);
+      font-size: 2rem; font-weight: 900;
+      color: var(--white); margin-bottom: 4px;
+    }
+    .modal-region { color: var(--gold); font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 24px; }
+    .modal-section-title {
+      font-size: 0.72rem; font-weight: 700;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 12px; margin-top: 24px;
+    }
+    .modal-stat-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .modal-stat {
+      background: var(--glass);
+      border: 1px solid var(--border);
+      border-radius: 4px; padding: 16px;
+      text-align: center;
+    }
+    .modal-stat-num {
+      font-family: var(--font-mono);
+      font-size: 1.5rem; font-weight: 600;
+      color: var(--white); display: block; margin-bottom: 4px;
+    }
+    .modal-stat-num.red { color: var(--red-alert); }
+    .modal-stat-lbl { font-size: 0.72rem; color: var(--muted); }
+    .modal-insight {
+      margin-top: 20px; padding: 16px;
+      background: rgba(200,168,75,0.06);
+      border-left: 3px solid var(--gold);
+      font-size: 0.9rem; color: var(--off-white); line-height: 1.7;
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- ============================================================
+     NAVIGATION
+     ============================================================ -->
+<nav id="navbar">
+  <div class="nav-inner">
+    <div class="nav-logo">
+      <div class="dot"></div>
+      Michigan Housing Crisis Report
+    </div>
+    <ul class="nav-links">
+      <li><a href="#stats">Statistics</a></li>
+      <li><a href="#causes">Causes</a></li>
+      <li><a href="#cities">Cities</a></li>
+      <li><a href="#calculator">Calculator</a></li>
+      <li><a href="#policy">Policy</a></li>
+      <li><a href="#resources">Resources</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#stats">Statistics</a>
+    <a href="#causes">Causes</a>
+    <a href="#cities">Cities</a>
+    <a href="#calculator">Calculator</a>
+    <a href="#policy">Policy</a>
+    <a href="#resources">Resources</a>
+  </div>
+</nav>
+
+<!-- ============================================================
+     HERO
+     ============================================================ -->
+<section id="hero">
+  <!-- Decorative Michigan-shape SVG -->
+  <svg class="hero-map-dec" viewBox="0 0 400 420" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M200,20 C220,20 260,40 270,80 C280,120 260,140 280,170 C300,200 340,210 350,240
+             C360,270 340,300 310,310 C280,320 250,310 240,330 C230,350 230,390 200,400
+             C170,410 160,380 150,360 C140,340 120,340 100,320 C80,300 70,270 80,240
+             C90,210 110,200 120,170 C130,140 110,110 130,80 C150,50 180,20 200,20Z"
+          fill="white" opacity="0.5"/>
+    <path d="M150,60 C130,50 110,60 100,80 C90,100 100,120 90,140 C80,160 60,160 50,180
+             C40,200 50,220 70,230 C90,240 110,230 130,240 C150,250 160,270 150,290
+             C140,310 120,310 110,330"
+          stroke="white" stroke-width="2" fill="none" opacity="0.4"/>
+  </svg>
+
+  <div class="container">
+    <div class="hero-content fade-in">
+      <div class="hero-eyebrow">📍 State of Michigan · 2024–2025 Report</div>
+      <h1 class="hero-title">
+        Michigan's<br />
+        <em>Housing Crisis</em><br />
+        by the Numbers
+      </h1>
+      <p class="hero-desc">
+        An estimated 10,000+ Michiganders experience homelessness on any given night.
+        Behind every statistic is a person, a family, and a community in need.
+        This report examines causes, city data, and actionable solutions.
+      </p>
+      <div class="hero-cta">
+        <a href="#stats" class="btn-primary">Explore Data</a>
+        <a href="#calculator" class="btn-outline">Rent Calculator</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     KEY STATISTICS
+     ============================================================ -->
+<section id="stats">
+  <div class="container">
+    <div class="stats-grid">
+      <div class="stat-card fade-in">
+        <span class="stat-number red" data-target="10065" data-prefix="">0</span>
+        <div class="stat-label">Experiencing Homelessness</div>
+        <div class="stat-note">Point-in-time count, Jan 2024</div>
+      </div>
+      <div class="stat-card fade-in">
+        <span class="stat-number gold" data-target="47" data-suffix="%">0%</span>
+        <div class="stat-label">Cost-Burdened Renters</div>
+        <div class="stat-note">Spend >30% income on rent</div>
+      </div>
+      <div class="stat-card fade-in">
+        <span class="stat-number" data-target="1142" data-prefix="$">$0</span>
+        <div class="stat-label">Avg. 2BR Fair Market Rent</div>
+        <div class="stat-note">HUD FMR, Michigan statewide</div>
+      </div>
+      <div class="stat-card fade-in">
+        <span class="stat-number red" data-target="22" data-suffix="$">0</span>
+        <div class="stat-label">Hourly Wage Needed</div>
+        <div class="stat-note">To afford avg. 2BR at 30% income</div>
+      </div>
+      <div class="stat-card fade-in">
+        <span class="stat-number" data-target="3" data-prefix="" data-suffix="rd Highest">0</span>
+        <div class="stat-label">Midwest Homelessness Rank</div>
+        <div class="stat-note">Among Great Lakes states</div>
+      </div>
+      <div class="stat-card fade-in">
+        <span class="stat-number gold" data-target="35" data-suffix="%">0%</span>
+        <div class="stat-label">Are Families with Children</div>
+        <div class="stat-note">Of Michigan's homeless population</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     CAUSES OF HOMELESSNESS
+     ============================================================ -->
+<section id="causes" class="section section-alt">
+  <div class="container">
+    <div class="tag">Root Causes</div>
+    <h2 class="section-title fade-in">Why Homelessness Happens</h2>
+    <p class="section-subtitle fade-in">
+      Homelessness is rarely the result of a single event. It emerges from the intersection
+      of economic hardship, systemic gaps, and a lack of affordable housing supply.
+    </p>
+
+    <div class="causes-grid">
+      <!-- Each card represents a structural cause -->
+      <div class="cause-card fade-in">
+        <span class="cause-icon">🏠</span>
+        <h3 class="cause-title">Affordable Housing Shortage</h3>
+        <p class="cause-desc">
+          Michigan needs an estimated 200,000+ additional affordable housing units.
+          Developers favor higher-margin market-rate construction, leaving low-income renters
+          without options as vacancy rates fall below 3% in major metros.
+        </p>
+      </div>
+      <div class="cause-card fade-in">
+        <span class="cause-icon">💸</span>
+        <h3 class="cause-title">Wage Stagnation & Poverty</h3>
+        <p class="cause-desc">
+          Michigan's minimum wage ($10.33/hr in 2024) requires workers to hold
+          2–3 jobs to afford average rent. Manufacturing job losses have devastated
+          communities, particularly in Detroit, Flint, and Pontiac.
+        </p>
+      </div>
+      <div class="cause-card fade-in">
+        <span class="cause-icon">🏥</span>
+        <h3 class="cause-title">Mental Health & Substance Use</h3>
+        <p class="cause-desc">
+          Approximately 30% of Michigan's homeless population lives with serious mental illness.
+          Inadequate community mental health infrastructure — following deinstitutionalization —
+          has pushed vulnerable individuals onto the streets.
+        </p>
+      </div>
+      <div class="cause-card fade-in">
+        <span class="cause-icon">⚖️</span>
+        <h3 class="cause-title">Eviction & Legal Instability</h3>
+        <p class="cause-desc">
+          Michigan filed over 80,000 eviction cases in 2023. Detroit is among the top
+          10 U.S. cities for eviction rates. Without right-to-counsel programs,
+          most tenants face landlords' attorneys alone.
+        </p>
+      </div>
+      <div class="cause-card fade-in">
+        <span class="cause-icon">🔗</span>
+        <h3 class="cause-title">Systemic Discrimination</h3>
+        <p class="cause-desc">
+          Black Michiganders represent 14% of the population but 40% of the homeless
+          population — a direct legacy of redlining, discriminatory lending,
+          and unequal enforcement of housing codes.
+        </p>
+      </div>
+      <div class="cause-card fade-in">
+        <span class="cause-icon">🎖️</span>
+        <h3 class="cause-title">Veteran & Youth Homelessness</h3>
+        <p class="cause-desc">
+          Over 700 veterans experience homelessness in Michigan on any given night.
+          Youth aging out of foster care face high homelessness risk — 40% experience
+          homelessness within 2 years of leaving the system.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     INTERACTIVE CITY DATA CARDS
+     ============================================================ -->
+<section id="cities" class="section">
+  <div class="container">
+    <div class="tag">City-Level Data</div>
+    <h2 class="section-title fade-in">Michigan Cities Compared</h2>
+    <p class="section-subtitle fade-in">
+      Click any city card to view detailed housing and homelessness statistics.
+      Filter by region to compare communities across the state.
+    </p>
+
+    <!-- Region filter buttons -->
+    <div class="city-filter">
+      <button class="filter-btn active" data-filter="all">All Cities</button>
+      <button class="filter-btn" data-filter="southeast">Southeast</button>
+      <button class="filter-btn" data-filter="west">West Michigan</button>
+      <button class="filter-btn" data-filter="north">Northern</button>
+      <button class="filter-btn" data-filter="east">East Michigan</button>
+    </div>
+
+    <div class="cities-grid" id="citiesGrid">
+      <!-- Cards generated by JS -->
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     RENT AFFORDABILITY CALCULATOR
+     ============================================================ -->
+<section id="calculator" class="section">
+  <div class="container">
+    <div class="tag">Interactive Tool</div>
+    <h2 class="section-title fade-in">Could You Afford Rent?</h2>
+    <p class="section-subtitle fade-in">
+      Enter your income and city to see how Michigan's housing market measures against
+      the standard 30% affordability threshold.
+    </p>
+
+    <div class="calc-wrapper">
+      <!-- Left: Input form -->
+      <div class="calc-form fade-in">
+        <div class="form-group">
+          <label class="form-label" for="calcCity">City / Metro Area</label>
+          <select class="form-control" id="calcCity">
+            <option value="detroit">Detroit Metro</option>
+            <option value="grandrapids">Grand Rapids</option>
+            <option value="lansing">Lansing</option>
+            <option value="flint">Flint</option>
+            <option value="annarbor">Ann Arbor</option>
+            <option value="kalamazoo">Kalamazoo</option>
+            <option value="pontiac">Pontiac</option>
+            <option value="saginaw">Saginaw</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="calcIncome">Annual Household Income</label>
+          <div class="range-row">
+            <input type="range" id="calcIncome" min="10000" max="120000" step="1000" value="36000" />
+            <span class="range-val" id="calcIncomeVal">$36,000</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="calcType">Rental Unit Size</label>
+          <select class="form-control" id="calcType">
+            <option value="studio">Studio</option>
+            <option value="1br">1 Bedroom</option>
+            <option value="2br" selected>2 Bedrooms</option>
+            <option value="3br">3 Bedrooms</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="calcHousehold">Household Size</label>
+          <select class="form-control" id="calcHousehold">
+            <option value="1">1 Person</option>
+            <option value="2">2 People</option>
+            <option value="3" selected>3 People</option>
+            <option value="4">4 People</option>
+            <option value="5">5+ People</option>
+          </select>
+        </div>
+
+        <button class="btn-primary" id="calcBtn" style="align-self:flex-start;">Calculate Affordability</button>
+      </div>
+
+      <!-- Right: Result panel -->
+      <div class="calc-result fade-in" id="calcResult">
+        <p class="result-headline">Your Housing Snapshot</p>
+        <span class="result-status status-warning" id="resultStatus">Adjust sliders to see your result</span>
+
+        <ul class="result-breakdown">
+          <li>
+            <span class="rb-label">Monthly Take-Home (est.)</span>
+            <span class="rb-value" id="rMonthly">—</span>
+          </li>
+          <li>
+            <span class="rb-label">30% Affordability Threshold</span>
+            <span class="rb-value" id="rThreshold">—</span>
+          </li>
+          <li>
+            <span class="rb-label">Fair Market Rent (selected city)</span>
+            <span class="rb-value" id="rRent">—</span>
+          </li>
+          <li>
+            <span class="rb-label">Monthly Gap</span>
+            <span class="rb-value" id="rGap">—</span>
+          </li>
+          <li>
+            <span class="rb-label">Hourly Wage Needed (40hr/wk)</span>
+            <span class="rb-value" id="rWage">—</span>
+          </li>
+        </ul>
+
+        <div class="affordability-bar-wrap" id="affordBarWrap" style="display:none;">
+          <div class="gold-line" style="margin-bottom:12px;"></div>
+          <div class="afford-bar-track">
+            <div class="afford-bar-fill" id="affordBarFill"></div>
+          </div>
+          <div class="afford-bar-labels">
+            <span>0% of income</span>
+            <span id="affordBarPct">—</span>
+            <span>50%+</span>
+          </div>
+        </div>
+
+        <div class="result-insight" id="resultInsight" style="display:none;"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     POLICY SOLUTIONS
+     ============================================================ -->
+<section id="policy" class="section section-alt">
+  <div class="container">
+    <div class="tag">Solutions</div>
+    <h2 class="section-title fade-in">Policy Pathways Forward</h2>
+    <p class="section-subtitle fade-in">
+      Researchers, advocates, and housing experts broadly agree on evidence-based
+      interventions that have reduced homelessness in peer states.
+    </p>
+
+    <div class="policy-grid">
+      <div class="policy-card fade-in">
+        <div class="policy-header">
+          <div class="policy-number">POLICY 01</div>
+          <h3 class="policy-title">Housing First Programs</h3>
+        </div>
+        <div class="policy-body">
+          <p class="policy-desc">
+            Provide permanent housing without preconditions like sobriety or employment.
+            Studies show Housing First reduces chronic homelessness by up to 88% and
+            is more cost-effective than emergency shelter.
+          </p>
+          <div class="policy-impact">Proven 88% reduction in chronic homelessness</div>
+        </div>
+      </div>
+
+      <div class="policy-card fade-in">
+        <div class="policy-header">
+          <div class="policy-number">POLICY 02</div>
+          <h3 class="policy-title">Inclusionary Zoning Reform</h3>
+        </div>
+        <div class="policy-body">
+          <p class="policy-desc">
+            Require new residential developments to include 10–20% affordable units.
+            Michigan's preemption law currently limits local governments' ability
+            to mandate affordable housing — this must be repealed.
+          </p>
+          <div class="policy-impact">Creates sustainable affordable unit pipeline</div>
+        </div>
+      </div>
+
+      <div class="policy-card fade-in">
+        <div class="policy-header">
+          <div class="policy-number">POLICY 03</div>
+          <h3 class="policy-title">Emergency Rental Assistance</h3>
+        </div>
+        <div class="policy-body">
+          <p class="policy-desc">
+            Permanent state-funded ERA programs prevent evictions before they become
+            homelessness. COVID-era programs proved the model: $2.5B in federal ERA
+            funds kept 200,000+ Michigan households stably housed in 2021–2022.
+          </p>
+          <div class="policy-impact">Prevents downstream emergency shelter costs</div>
+        </div>
+      </div>
+
+      <div class="policy-card fade-in">
+        <div class="policy-header">
+          <div class="policy-number">POLICY 04</div>
+          <h3 class="policy-title">Right to Counsel — Evictions</h3>
+        </div>
+        <div class="policy-body">
+          <p class="policy-desc">
+            Guarantee legal representation for low-income tenants in eviction proceedings.
+            New York City's program reduced evictions by 40% and saved $320M annually
+            in shelter and social service costs.
+          </p>
+          <div class="policy-impact">40% reduction in evictions where implemented</div>
+        </div>
+      </div>
+
+      <div class="policy-card fade-in">
+        <div class="policy-header">
+          <div class="policy-number">POLICY 05</div>
+          <h3 class="policy-title">Behavioral Health Integration</h3>
+        </div>
+        <div class="policy-body">
+          <p class="policy-desc">
+            Co-locate mental health, substance use, and housing services under one roof.
+            Michigan's community mental health system needs $300M+ in new investment
+            to meet current demand. Assertive Community Treatment (ACT) teams show
+            strong outcomes.
+          </p>
+          <div class="policy-impact">60% reduction in hospitalizations among participants</div>
+        </div>
+      </div>
+
+      <div class="policy-card fade-in">
+        <div class="policy-header">
+          <div class="policy-number">POLICY 06</div>
+          <h3 class="policy-title">Land Trust & Social Housing Models</h3>
+        </div>
+        <div class="policy-body">
+          <p class="policy-desc">
+            Community Land Trusts permanently remove housing from speculative markets.
+            The Detroit Community Land Trust is a local model. Social housing — publicly
+            financed, mixed-income developments — expands this approach to scale.
+          </p>
+          <div class="policy-impact">Permanently affordable; protects community wealth</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Historical Timeline -->
+    <div style="margin-top: 70px;">
+      <div class="tag">Timeline</div>
+      <h3 class="section-title fade-in" style="font-size:1.8rem; margin-bottom:36px;">
+        Michigan Housing Policy: Key Moments
+      </h3>
+      <div class="timeline">
+        <div class="timeline-item fade-in">
+          <div class="timeline-dot"></div>
+          <div class="timeline-year">1968</div>
+          <div class="timeline-title">Fair Housing Act Passed</div>
+          <p class="timeline-desc">Federal law bans housing discrimination by race, religion, and national origin. Michigan's legacy of redlining continues to shape housing inequality today.</p>
+        </div>
+        <div class="timeline-item fade-in">
+          <div class="timeline-dot"></div>
+          <div class="timeline-year">1999</div>
+          <div class="timeline-title">Michigan Preempts Local Rent Control</div>
+          <p class="timeline-desc">State law strips cities' authority to enact rent stabilization ordinances, limiting local responses to housing cost spikes.</p>
+        </div>
+        <div class="timeline-item fade-in">
+          <div class="timeline-dot"></div>
+          <div class="timeline-year">2013</div>
+          <div class="timeline-title">Detroit Files for Bankruptcy</div>
+          <p class="timeline-desc">60,000 blighted structures, 78,000 abandoned parcels, and a 25% poverty rate create entrenched housing instability in Michigan's largest city.</p>
+        </div>
+        <div class="timeline-item fade-in">
+          <div class="timeline-dot"></div>
+          <div class="timeline-year">2015–2019</div>
+          <div class="timeline-title">Flint Water Crisis</div>
+          <p class="timeline-desc">Lead contamination displaces residents, devalues properties, and deepens housing insecurity in an already vulnerable community.</p>
+        </div>
+        <div class="timeline-item fade-in">
+          <div class="timeline-dot"></div>
+          <div class="timeline-year">2021</div>
+          <div class="timeline-title">$2.5B Federal ERA Funding</div>
+          <p class="timeline-desc">COVID emergency rental assistance prevents mass evictions. Michigan distributes funds faster than most states, a model for future programs.</p>
+        </div>
+        <div class="timeline-item fade-in">
+          <div class="timeline-dot"></div>
+          <div class="timeline-year">2023–2025</div>
+          <div class="timeline-title">Governor Whitmer's Housing Plan</div>
+          <p class="timeline-desc">$100M+ in state investments target affordable housing production, homelessness prevention, and community land trusts. Progress is ongoing.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     VOLUNTEER & RESOURCES
+     ============================================================ -->
+<section id="resources" class="section">
+  <div class="container">
+    <div class="tag">Take Action</div>
+    <h2 class="section-title fade-in">Resources & How to Help</h2>
+    <p class="section-subtitle fade-in">
+      Whether you need assistance, want to volunteer, or are ready to advocate —
+      these organizations are doing critical work across Michigan.
+    </p>
+
+    <div class="resources-grid">
+      <div class="resource-card fade-in">
+        <div class="rc-type">Emergency Shelter</div>
+        <div class="rc-name">Homeless Action Network of Detroit (HAND)</div>
+        <p class="rc-desc">Coordinates emergency shelter, outreach, and housing placement across Wayne County. Volunteer and donation opportunities available.</p>
+        <a href="https://www.handdetroit.org" target="_blank" rel="noopener" class="rc-link">Visit HAND</a>
+      </div>
+
+      <div class="resource-card fade-in">
+        <div class="rc-type">Statewide Advocacy</div>
+        <div class="rc-name">Michigan Coalition Against Homelessness (MCAH)</div>
+        <p class="rc-desc">Leads policy advocacy, provider training, and data collection on homelessness statewide. Supports local Continuum of Care organizations.</p>
+        <a href="https://www.mihomeless.org" target="_blank" rel="noopener" class="rc-link">Visit MCAH</a>
+      </div>
+
+      <div class="resource-card fade-in">
+        <div class="rc-type">Affordable Housing</div>
+        <div class="rc-name">Community Economic Development Association of Michigan (CEDAM)</div>
+        <p class="rc-desc">Advances community development, affordable housing finance, and economic inclusion. Runs the Michigan LIHTC technical assistance program.</p>
+        <a href="https://www.cedamichigan.org" target="_blank" rel="noopener" class="rc-link">Visit CEDAM</a>
+      </div>
+
+      <div class="resource-card fade-in">
+        <div class="rc-type">Food & Basic Needs</div>
+        <div class="rc-name">Gleaners Community Food Bank</div>
+        <p class="rc-desc">Serves 440,000+ people annually across metro Detroit. Food security is foundational to housing stability — addresses root causes together.</p>
+        <a href="https://www.gcfb.org" target="_blank" rel="noopener" class="rc-link">Visit Gleaners</a>
+      </div>
+
+      <div class="resource-card fade-in">
+        <div class="rc-type">Legal Aid</div>
+        <div class="rc-name">Michigan Legal Help</div>
+        <p class="rc-desc">Free legal resources for tenants facing eviction, utility shutoffs, or housing discrimination. Self-help tools and attorney referrals.</p>
+        <a href="https://www.michiganlegalhelp.org" target="_blank" rel="noopener" class="rc-link">Get Legal Help</a>
+      </div>
+
+      <div class="resource-card fade-in">
+        <div class="rc-type">Youth Services</div>
+        <div class="rc-name">Ruth Ellis Center — Detroit</div>
+        <p class="rc-desc">Serves LGBTQ+ youth experiencing homelessness with emergency shelter, transitional housing, and comprehensive support services.</p>
+        <a href="https://www.ruthelliscenter.org" target="_blank" rel="noopener" class="rc-link">Visit Ruth Ellis</a>
+      </div>
+
+      <div class="resource-card fade-in">
+        <div class="rc-type">Veteran Services</div>
+        <div class="rc-name">Michigan Veterans Affairs Agency (MVAA)</div>
+        <p class="rc-desc">HUD-VASH vouchers, transitional housing, and case management for veterans experiencing homelessness across all 83 Michigan counties.</p>
+        <a href="https://www.michigan.gov/mvaa" target="_blank" rel="noopener" class="rc-link">Visit MVAA</a>
+      </div>
+
+      <div class="resource-card fade-in">
+        <div class="rc-type">Crisis Line</div>
+        <div class="rc-name">Michigan 211</div>
+        <p class="rc-desc">24/7 helpline connecting individuals and families to emergency housing, shelter, food assistance, and mental health services statewide.</p>
+        <a href="https://www.mi211.org" target="_blank" rel="noopener" class="rc-link">Call 2-1-1</a>
+      </div>
+    </div>
+
+    <!-- Call to action -->
+    <div style="margin-top: 60px; text-align: center;" class="fade-in">
+      <div class="gold-line" style="margin: 0 auto 20px;"></div>
+      <h3 style="font-family: var(--font-display); font-size: 1.6rem; color: var(--white); margin-bottom: 14px;">
+        Your voice matters in Lansing.
+      </h3>
+      <p style="color: var(--muted); max-width: 520px; margin: 0 auto 28px; font-size: 1rem;">
+        Contact your state representative and senator to advocate for affordable housing
+        funding, eviction prevention, and expanded mental health services.
+      </p>
+      <a href="https://www.legislature.mi.gov" target="_blank" rel="noopener" class="btn-primary">
+        Find Your Legislator
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     FOOTER
+     ============================================================ -->
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-top">
+        <div>
+          <div class="footer-brand">Michigan Housing Crisis Report</div>
+          <p class="footer-byline">
+            Data sourced from HUD Point-in-Time Count, U.S. Census Bureau ACS,
+            National Low Income Housing Coalition, Michigan State Housing Development Authority (MSHDA),
+            and peer-reviewed housing research. Updated 2024–2025.
+          </p>
+        </div>
+        <div class="footer-links">
+          <a href="#stats">Data</a>
+          <a href="#causes">Causes</a>
+          <a href="#cities">Cities</a>
+          <a href="#calculator">Calculator</a>
+          <a href="#policy">Policy</a>
+          <a href="#resources">Help</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        This report is for public educational purposes. Statistics are approximations based on available public data.
+        For emergency housing assistance, call <strong>2-1-1</strong> or visit mi211.org.
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ============================================================
+     CITY DETAIL MODAL
+     ============================================================ -->
+<div class="modal-overlay" id="cityModal">
+  <div class="modal-box">
+    <button class="modal-close" id="modalClose">✕</button>
+    <div id="modalContent"></div>
+  </div>
+</div>
+
+<!-- ============================================================
+     JAVASCRIPT
+     ============================================================ -->
+<script>
+// ============================================================
+// DATA: Michigan Cities Housing & Homelessness Statistics
+// Sources: HUD, MSHDA, Census ACS, NLIHC 2024 data
+// ============================================================
+const cityData = [
+  {
+    id: 'detroit',
+    name: 'Detroit',
+    region: 'southeast',
+    regionLabel: 'Southeast Michigan',
+    homeless: 4213,
+    homelessRate: 6.2, // per 1,000 residents
+    medianRent2BR: 1050,
+    medianIncome: 34762,
+    povertyRate: 30.6,
+    evictionRate: 8.4,
+    costBurdened: 58,
+    severity: 92,
+    vacancyRate: 2.1,
+    wageNeeded: 20.19,
+    population: 632464,
+    insight: "Detroit has one of the highest eviction rates in the United States. Post-bankruptcy, property speculation has driven rents up even as incomes remain suppressed. The city has lost over 50% of its population since 1950, yet affordable housing remains critically scarce due to decades of disinvestment and recent gentrification pressures.",
+    program: "Detroit Right to Counsel, Bridging Communities HOME program"
+  },
+  {
+    id: 'grandrapids',
+    name: 'Grand Rapids',
+    region: 'west',
+    regionLabel: 'West Michigan',
+    homeless: 891,
+    homelessRate: 4.3,
+    medianRent2BR: 1200,
+    medianIncome: 44500,
+    povertyRate: 22.1,
+    evictionRate: 4.2,
+    costBurdened: 44,
+    severity: 68,
+    vacancyRate: 3.4,
+    wageNeeded: 23.08,
+    population: 198917,
+    insight: "Grand Rapids has seen rapid rent growth (18% in 2 years) driven by downtown development and an influx of young professionals. Families in traditionally affordable neighborhoods like Southtown and Heartside are being displaced. The city's shelter system regularly operates at 98%+ capacity.",
+    program: "Dwelling Place affordable housing, Housing Kent continuum"
+  },
+  {
+    id: 'lansing',
+    name: 'Lansing',
+    region: 'east',
+    regionLabel: 'Mid-Michigan',
+    homeless: 612,
+    homelessRate: 5.1,
+    medianRent2BR: 950,
+    medianIncome: 38200,
+    povertyRate: 24.7,
+    evictionRate: 5.8,
+    costBurdened: 46,
+    severity: 71,
+    vacancyRate: 4.1,
+    wageNeeded: 18.27,
+    population: 112644,
+    insight: "As the state capital, Lansing paradoxically struggles with housing policy implementation locally. State government employment creates income bifurcation — well-paid policy workers alongside service workers who cannot afford rising rents. The Lansing area CoC has piloted Housing First with measurable success.",
+    program: "Greater Lansing Housing Coalition, Capital Area Housing Partnership"
+  },
+  {
+    id: 'flint',
+    name: 'Flint',
+    region: 'east',
+    regionLabel: 'East Michigan',
+    homeless: 743,
+    homelessRate: 7.8,
+    medianRent2BR: 780,
+    medianIncome: 28100,
+    povertyRate: 36.4,
+    evictionRate: 9.1,
+    costBurdened: 61,
+    severity: 95,
+    vacancyRate: 1.8,
+    wageNeeded: 15.00,
+    population: 96448,
+    insight: "Flint's housing crisis is compounded by the water contamination disaster — thousands of properties remain blighted, infrastructure is damaged, and residents face health costs that consume income needed for rent. Despite low nominal rents, extreme poverty means even $780/mo is unaffordable for 36% of residents living in poverty.",
+    program: "Genesee County Community Action Resource, MSHDA Flint Recovery"
+  },
+  {
+    id: 'annarbor',
+    name: 'Ann Arbor',
+    region: 'southeast',
+    regionLabel: 'Southeast Michigan',
+    homeless: 374,
+    homelessRate: 3.1,
+    medianRent2BR: 1750,
+    medianIncome: 63800,
+    povertyRate: 16.2,
+    evictionRate: 2.1,
+    costBurdened: 38,
+    severity: 55,
+    vacancyRate: 1.2,
+    wageNeeded: 33.65,
+    population: 121477,
+    insight: "Ann Arbor's University of Michigan drives one of the tightest and most expensive rental markets in Michigan. Student demand competes directly with working families for units. Despite higher median incomes, service workers, retail employees, and young graduates face severe housing cost burden. Zoning restrictions limit new supply.",
+    program: "Shelter Association of Washtenaw County, Avalon Housing"
+  },
+  {
+    id: 'kalamazoo',
+    name: 'Kalamazoo',
+    region: 'west',
+    regionLabel: 'West Michigan',
+    homeless: 445,
+    homelessRate: 5.6,
+    medianRent2BR: 920,
+    medianIncome: 35600,
+    povertyRate: 27.3,
+    evictionRate: 6.3,
+    costBurdened: 48,
+    severity: 74,
+    vacancyRate: 3.8,
+    wageNeeded: 17.69,
+    population: 72370,
+    insight: "Kalamazoo has a notable dichotomy: the Kalamazoo Promise scholarship program invests in education while housing instability undermines its outcomes. Students from homeless families cannot fully benefit from educational opportunities. The city has invested in affordable housing but faces a gap of 3,000+ units.",
+    program: "Kalamazoo Loaves & Fishes, Kalamazoo County CoC"
+  },
+  {
+    id: 'pontiac',
+    name: 'Pontiac',
+    region: 'southeast',
+    regionLabel: 'Southeast Michigan',
+    homeless: 389,
+    homelessRate: 6.8,
+    medianRent2BR: 870,
+    medianIncome: 31200,
+    povertyRate: 28.9,
+    evictionRate: 7.7,
+    costBurdened: 55,
+    severity: 88,
+    vacancyRate: 2.6,
+    wageNeeded: 16.73,
+    population: 60170,
+    insight: "Once a hub of auto manufacturing, Pontiac suffered catastrophic job losses and population decline. The city still has not recovered economically. Vacant properties are common, yet available, affordable units are scarce — many are uninhabitable. Oakland County CoC works to address this paradox.",
+    program: "Oakland County CoC, Lighthouse Michigan"
+  },
+  {
+    id: 'saginaw',
+    name: 'Saginaw',
+    region: 'east',
+    regionLabel: 'East Michigan',
+    homeless: 521,
+    homelessRate: 7.2,
+    medianRent2BR: 750,
+    medianIncome: 27800,
+    povertyRate: 34.1,
+    evictionRate: 8.9,
+    costBurdened: 59,
+    severity: 91,
+    vacancyRate: 2.3,
+    wageNeeded: 14.42,
+    population: 45955,
+    insight: "Saginaw has one of the highest poverty rates in Michigan and the Midwest. Industrial decline left a legacy of blight and disinvestment. Despite very low rents nationally, the income-to-rent ratio is among the worst in the state. The city needs substantial federal investment in affordable housing rehabilitation.",
+    program: "Saginaw County CoC, Diocese of Saginaw Catholic Charities"
+  },
+  {
+    id: 'traversecity',
+    name: 'Traverse City',
+    region: 'north',
+    regionLabel: 'Northern Michigan',
+    homeless: 182,
+    homelessRate: 5.9,
+    medianRent2BR: 1400,
+    medianIncome: 52300,
+    povertyRate: 13.8,
+    evictionRate: 2.8,
+    costBurdened: 42,
+    severity: 65,
+    vacancyRate: 0.9,
+    wageNeeded: 26.92,
+    population: 15800,
+    insight: "Traverse City's tourism-driven economy creates seasonal housing demand that squeezes year-round residents. Vacation rental platforms (Airbnb, VRBO) have converted long-term rental units into short-term ones, reducing supply by an estimated 15%. Workers in hospitality cannot afford to live where they work.",
+    program: "Housing North, Northwest Michigan Community Action Agency"
+  },
+  {
+    id: 'marquette',
+    name: 'Marquette',
+    region: 'north',
+    regionLabel: 'Upper Peninsula',
+    homeless: 134,
+    homelessRate: 4.4,
+    medianRent2BR: 980,
+    medianIncome: 45200,
+    povertyRate: 17.6,
+    evictionRate: 2.3,
+    costBurdened: 36,
+    severity: 48,
+    vacancyRate: 5.2,
+    wageNeeded: 18.85,
+    population: 20247,
+    insight: "The Upper Peninsula faces a unique challenge: housing supply is limited by geography and harsh winters make construction costly and seasonal. NMU drives rental demand in Marquette, and rural U.P. communities face extreme isolation that compounds housing vulnerability, with limited shelter options across vast distances.",
+    program: "UP Health System, Alger-Marquette Community Action"
+  }
+];
+
+// ============================================================
+// CITY CARDS: Render and Filter
+// ============================================================
+function getSeverityColor(val) {
+  if (val >= 80) return '#e05252';
+  if (val >= 60) return '#e8a84b';
+  return '#4caf82';
+}
+
+function getValueClass(field, val) {
+  if (field === 'eviction' || field === 'poverty' || field === 'homeless') {
+    if (val >= 7) return 'bad';
+    if (val >= 4) return 'warn';
+    return 'good';
+  }
+  if (field === 'costBurdened') {
+    if (val >= 50) return 'bad';
+    if (val >= 40) return 'warn';
+    return 'good';
+  }
+  return '';
+}
+
+function renderCities(filter = 'all') {
+  const grid = document.getElementById('citiesGrid');
+  grid.innerHTML = '';
+  const filtered = filter === 'all' ? cityData : cityData.filter(c => c.region === filter);
+
+  filtered.forEach((city, i) => {
+    const card = document.createElement('div');
+    card.className = 'city-card fade-in';
+    card.style.animationDelay = `${i * 0.07}s`;
+    card.innerHTML = `
+      <div class="city-name">${city.name}</div>
+      <div class="city-region">${city.regionLabel}</div>
+      <div class="city-stat-row">
+        <span class="csr-label">Experiencing Homelessness</span>
+        <span class="csr-value ${getValueClass('homeless', city.homelessRate)}">${city.homeless.toLocaleString()}</span>
+      </div>
+      <div class="city-stat-row">
+        <span class="csr-label">Rate (per 1,000)</span>
+        <span class="csr-value ${getValueClass('homeless', city.homelessRate)}">${city.homelessRate}</span>
+      </div>
+      <div class="city-stat-row">
+        <span class="csr-label">Median 2BR Rent</span>
+        <span class="csr-value">$${city.medianRent2BR.toLocaleString()}/mo</span>
+      </div>
+      <div class="city-stat-row">
+        <span class="csr-label">Cost-Burdened Renters</span>
+        <span class="csr-value ${getValueClass('costBurdened', city.costBurdened)}">${city.costBurdened}%</span>
+      </div>
+      <div class="city-stat-row">
+        <span class="csr-label">Poverty Rate</span>
+        <span class="csr-value ${getValueClass('poverty', city.povertyRate)}">${city.povertyRate}%</span>
+      </div>
+      <div class="severity-bar">
+        <div class="severity-fill" style="width:${city.severity}%; background: ${getSeverityColor(city.severity)};"></div>
+      </div>
+      <div class="severity-label">
+        <span>Crisis Severity</span>
+        <span style="color:${getSeverityColor(city.severity)}; font-weight:700;">${city.severity}/100</span>
+      </div>
+    `;
+    card.addEventListener('click', () => openCityModal(city));
+    grid.appendChild(card);
+    // Trigger fade-in
+    setTimeout(() => card.classList.add('visible'), 50 + i * 70);
+  });
+}
+
+// Filter buttons
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderCities(btn.dataset.filter);
+  });
+});
+
+renderCities();
+
+// ============================================================
+// CITY MODAL
+// ============================================================
+function openCityModal(city) {
+  const modal = document.getElementById('cityModal');
+  const content = document.getElementById('modalContent');
+  content.innerHTML = `
+    <div class="modal-city-name">${city.name}</div>
+    <div class="modal-region">${city.regionLabel}</div>
+
+    <div class="modal-section-title">Housing & Homelessness</div>
+    <div class="modal-stat-grid">
+      <div class="modal-stat">
+        <span class="modal-stat-num red">${city.homeless.toLocaleString()}</span>
+        <span class="modal-stat-lbl">Experiencing Homelessness</span>
+      </div>
+      <div class="modal-stat">
+        <span class="modal-stat-num">${city.homelessRate}</span>
+        <span class="modal-stat-lbl">Per 1,000 Residents</span>
+      </div>
+      <div class="modal-stat">
+        <span class="modal-stat-num red">${city.costBurdened}%</span>
+        <span class="modal-stat-lbl">Cost-Burdened Renters</span>
+      </div>
+      <div class="modal-stat">
+        <span class="modal-stat-num">${city.evictionRate}%</span>
+        <span class="modal-stat-lbl">Eviction Rate</span>
+      </div>
+    </div>
+
+    <div class="modal-section-title">Economic Context</div>
+    <div class="modal-stat-grid">
+      <div class="modal-stat">
+        <span class="modal-stat-num">$${city.medianIncome.toLocaleString()}</span>
+        <span class="modal-stat-lbl">Median Household Income</span>
+      </div>
+      <div class="modal-stat">
+        <span class="modal-stat-num">$${city.medianRent2BR.toLocaleString()}</span>
+        <span class="modal-stat-lbl">Median 2BR Monthly Rent</span>
+      </div>
+      <div class="modal-stat">
+        <span class="modal-stat-num red">${city.povertyRate}%</span>
+        <span class="modal-stat-lbl">Poverty Rate</span>
+      </div>
+      <div class="modal-stat">
+        <span class="modal-stat-num">$${city.wageNeeded}/hr</span>
+        <span class="modal-stat-lbl">Hourly Wage Needed</span>
+      </div>
+    </div>
+
+    <div class="modal-section-title">Context</div>
+    <div class="modal-insight">${city.insight}</div>
+
+    <div class="modal-section-title">Local Programs</div>
+    <div style="font-size:0.88rem; color: var(--off-white);">${city.program}</div>
+  `;
+  modal.classList.add('open');
+}
+
+document.getElementById('modalClose').addEventListener('click', () => {
+  document.getElementById('cityModal').classList.remove('open');
+});
+document.getElementById('cityModal').addEventListener('click', (e) => {
+  if (e.target === document.getElementById('cityModal')) {
+    document.getElementById('cityModal').classList.remove('open');
+  }
+});
+
+// ============================================================
+// RENT AFFORDABILITY CALCULATOR
+// Fair Market Rents by city & unit type (HUD FMR 2024)
+// ============================================================
+const fmrData = {
+  detroit:     { studio: 780,  '1br': 900,  '2br': 1150, '3br': 1450 },
+  grandrapids: { studio: 850,  '1br': 980,  '2br': 1200, '3br': 1520 },
+  lansing:     { studio: 720,  '1br': 830,  '2br': 980,  '3br': 1240 },
+  flint:       { studio: 580,  '1br': 680,  '2br': 820,  '3br': 1050 },
+  annarbor:    { studio: 1100, '1br': 1380, '2br': 1750, '3br': 2200 },
+  kalamazoo:   { studio: 670,  '1br': 780,  '2br': 960,  '3br': 1210 },
+  pontiac:     { studio: 720,  '1br': 840,  '2br': 1050, '3br': 1320 },
+  saginaw:     { studio: 540,  '1br': 640,  '2br': 790,  '3br': 1010 }
+};
+
+const incomeSlider = document.getElementById('calcIncome');
+const incomeVal    = document.getElementById('calcIncomeVal');
+
+// Live-update income display
+incomeSlider.addEventListener('input', () => {
+  const v = parseInt(incomeSlider.value);
+  incomeVal.textContent = '$' + v.toLocaleString();
+});
+
+// Calculate on button click
+document.getElementById('calcBtn').addEventListener('click', calculateAffordability);
+
+function calculateAffordability() {
+  const city    = document.getElementById('calcCity').value;
+  const income  = parseInt(incomeSlider.value);
+  const type    = document.getElementById('calcType').value;
+
+  const monthlyGross   = income / 12;
+  const monthlyTakeHome = monthlyGross * 0.78; // est. after taxes
+  const threshold30    = monthlyTakeHome * 0.30;
+  const rent           = fmrData[city][type];
+  const gap            = threshold30 - rent;
+  const pct            = (rent / monthlyTakeHome) * 100;
+  const wageNeeded     = (rent * 12 / 0.30) / (52 * 40); // hourly wage at 40hr/week
+
+  // Update values
+  document.getElementById('rMonthly').textContent    = '$' + monthlyTakeHome.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',') + '/mo';
+  document.getElementById('rThreshold').textContent  = '$' + threshold30.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',') + '/mo';
+  document.getElementById('rRent').textContent       = '$' + rent.toLocaleString() + '/mo';
+  document.getElementById('rWage').textContent       = '$' + wageNeeded.toFixed(2) + '/hr';
+
+  const gapEl = document.getElementById('rGap');
+  if (gap >= 0) {
+    gapEl.textContent  = '+$' + gap.toFixed(0) + ' surplus';
+    gapEl.className    = 'rb-value green';
+  } else {
+    gapEl.textContent  = '-$' + Math.abs(gap).toFixed(0) + ' shortfall';
+    gapEl.className    = 'rb-value red';
+  }
+
+  // Status
+  const statusEl  = document.getElementById('resultStatus');
+  const insightEl = document.getElementById('resultInsight');
+  const barFill   = document.getElementById('affordBarFill');
+  const barPct    = document.getElementById('affordBarPct');
+
+  document.getElementById('affordBarWrap').style.display = 'block';
+  document.getElementById('resultInsight').style.display = 'block';
+
+  const barWidth = Math.min(pct * 2, 100); // scale: 50% income = full bar
+  barFill.style.width = barWidth + '%';
+  barPct.textContent  = pct.toFixed(1) + '% of income';
+
+  if (pct <= 30) {
+    statusEl.textContent = '✓ Affordable';
+    statusEl.className   = 'result-status status-ok';
+    barFill.style.background = '#4caf82';
+    insightEl.textContent = `At $${income.toLocaleString()}/year, you can afford this ${type} in ${document.getElementById('calcCity').selectedOptions[0].text} while meeting the standard 30% threshold. You have a $${gap.toFixed(0)} monthly housing surplus — but utilities, maintenance, and renter's insurance add an estimated $150–$300/month.`;
+  } else if (pct <= 45) {
+    statusEl.textContent = '⚠ Moderately Burdened';
+    statusEl.className   = 'result-status status-warning';
+    barFill.style.background = '#e8a84b';
+    insightEl.textContent = `Spending ${pct.toFixed(1)}% of take-home pay on rent leaves little margin for food, healthcare, childcare, or savings. At this level, a single unexpected expense — car repair, medical bill — can trigger an eviction spiral. You'd need to earn $${wageNeeded.toFixed(2)}/hr working full time to reach the 30% threshold.`;
+  } else {
+    statusEl.textContent = '✗ Severely Burdened';
+    statusEl.className   = 'result-status status-danger';
+    barFill.style.background = '#e05252';
+    insightEl.textContent = `${pct.toFixed(1)}% of your income going to rent is the definition of a housing crisis at the individual level. At these income levels, families routinely choose between rent, food, medicine, and heat. To afford this unit at 30%, you'd need to earn $${wageNeeded.toFixed(2)}/hr — ${(wageNeeded / 10.33).toFixed(1)}x Michigan's minimum wage.`;
+  }
+}
+
+// Run once on load with defaults
+calculateAffordability();
+
+// ============================================================
+// ANIMATED COUNTER: Statistics
+// Counts up to target number on scroll
+// ============================================================
+function animateCounter(el) {
+  const target  = parseInt(el.dataset.target);
+  const prefix  = el.dataset.prefix  || '';
+  const suffix  = el.dataset.suffix  || '';
+  const duration = 2000;
+  const step    = target / (duration / 16);
+  let current   = 0;
+
+  const timer = setInterval(() => {
+    current += step;
+    if (current >= target) {
+      current = target;
+      clearInterval(timer);
+    }
+    el.textContent = prefix + Math.floor(current).toLocaleString() + suffix;
+  }, 16);
+}
+
+// ============================================================
+// INTERSECTION OBSERVER: Scroll animations
+// ============================================================
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      // Trigger counters
+      if (entry.target.classList.contains('stat-number')) {
+        animateCounter(entry.target);
+      }
+    }
+  });
+}, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+
+// Observe all fade-in elements
+document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+// Observe stat numbers
+document.querySelectorAll('.stat-number').forEach(el => observer.observe(el));
+
+// ============================================================
+// HAMBURGER MENU
+// ============================================================
+document.getElementById('hamburger').addEventListener('click', () => {
+  document.getElementById('mobileMenu').classList.toggle('open');
+});
+
+// Close mobile menu on link click
+document.querySelectorAll('.mobile-menu a').forEach(a => {
+  a.addEventListener('click', () => {
+    document.getElementById('mobileMenu').classList.remove('open');
+  });
+});
+
+// ============================================================
+// NAVBAR SCROLL: Add shadow on scroll
+// ============================================================
+window.addEventListener('scroll', () => {
+  const nb = document.getElementById('navbar');
+  if (window.scrollY > 40) {
+    nb.style.boxShadow = '0 2px 30px rgba(0,0,0,0.5)';
+  } else {
+    nb.style.boxShadow = 'none';
+  }
+});
+</script>
+
+</body>
+</html>
